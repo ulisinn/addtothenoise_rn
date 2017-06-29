@@ -21,6 +21,15 @@ export const REMOTE_DATA_READY = 'REMOTE_DATA_READY';
 
 export const INIT_PORTFOLIO = 'INIT_PORTFOLIO';
 
+export const SPLASH: string = 'splash';
+export const ALL: string = 'all';
+export const PRINT: string = 'print';
+export const WEB: string = 'web';
+export const OTHER: string = 'other';
+export const AUDIO: string = 'other';
+export const OPINION: string = 'other';
+export const ABOUT: string = 'about';
+
 export const baseUrl = 'http://addtothenoise.com';
 const url = `${baseUrl}/api/all.php`;
 
