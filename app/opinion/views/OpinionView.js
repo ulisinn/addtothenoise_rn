@@ -1,9 +1,14 @@
 'use strict';
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actionCreators from '../../actions/index';
+import * as _ from 'lodash';
+
 import { View, Text, TouchableOpacity } from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 
-export default class TabThreeScreenOne extends React.Component {
+class OpinionView extends React.Component {
   
   static navigationOptions = {
     title: '{addtothenoise}',
@@ -25,6 +30,8 @@ export default class TabThreeScreenOne extends React.Component {
   
   
   render() {
+    const { currentSelection } = this.props;
+  
     return (
       <View style={{
         flex: 1,
@@ -32,8 +39,35 @@ export default class TabThreeScreenOne extends React.Component {
         justifyContent: 'center',
         paddingTop: 20,
       }}>
-        <Text>{'Op Ed'}</Text>
+        <Text>{(currentSelection.length > 0) ? this.props.currentSelection[0].body : ''}</Text>
       </View>
     );
   }
 }
+
+
+OpinionView.defaultProps = {
+  currentSelection: [],
+};
+
+
+const getCurrentSelection = (category, all) => {
+  const res = all.filter((o) => {
+    return (o.category === category) ? true : false;
+  });
+  
+  return res;
+};
+const mapStateToProps = (state) => {
+  return {
+    category: state.portfolioReducer.category,
+    currentSelection: getCurrentSelection(state.portfolioReducer.category, state.portfolioReducer.all),
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionCreators, dispatch);
+}
+
+const TabThreeScreenOne = connect(mapStateToProps, mapDispatchToProps)(OpinionView);
+export default TabThreeScreenOne;
