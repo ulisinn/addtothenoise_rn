@@ -3,8 +3,8 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/index';
-import * as _ from 'lodash';
 
+import { getCurrentSelection } from '../../currentSelection';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 
@@ -31,7 +31,7 @@ class OpinionView extends React.Component {
   
   render() {
     const { currentSelection } = this.props;
-  
+    
     return (
       <View style={{
         flex: 1,
@@ -50,14 +50,6 @@ OpinionView.defaultProps = {
   currentSelection: [],
 };
 
-
-const getCurrentSelection = (category, all) => {
-  const res = all.filter((o) => {
-    return (o.category === category) ? true : false;
-  });
-  
-  return res;
-};
 const mapStateToProps = (state) => {
   return {
     category: state.portfolioReducer.category,

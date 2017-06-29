@@ -4,7 +4,7 @@
 /**
  * Created by ulrichsinn on 04/21/2017.
  */
-import { INIT_PORTFOLIO, SPLASH, ABOUT, OPINION } from '../store';
+import { INIT_PORTFOLIO, SPLASH, ABOUT, OPINION, ALL } from '../store';
 
 const intitialState = {
   all: [],
@@ -25,7 +25,7 @@ export default function portfolioReducer(state = intitialState, action) {
       console.log('====== Navigation/NAVIGATE', action);
       return {
         ...state,
-        category: action.routeName,
+        category: (action.routeName === 'PortfolioMain') ? ALL : action.routeName,
       };
     
     default:

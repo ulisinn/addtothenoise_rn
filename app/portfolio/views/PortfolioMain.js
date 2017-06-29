@@ -1,9 +1,14 @@
 'use strict';
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actionCreators from '../../actions/index';
+
+import { getCurrentSelection, getSplashScreenSelection } from '../../currentSelection';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 
-export default class TabOneScreenTwo extends React.Component {
+class MainScreen extends React.Component {
   static navigationOptions = {
     title: '{addtothenoise}',
     headerBackTitle: null,
@@ -24,6 +29,10 @@ export default class TabOneScreenTwo extends React.Component {
   };
   
   render() {
+    
+    const { currentSelection } = this.props;
+    
+    console.log('MainScreen render', currentSelection);
     return (
       <View style={{
         flex: 1,
@@ -31,21 +40,10 @@ export default class TabOneScreenTwo extends React.Component {
         justifyContent: 'center',
       }}>
         <Text>{'Portfolio Main'}</Text>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.goBack()}
-          style={{
-            padding: 10,
-            borderRadius: 10,
-            backgroundColor: TEXT_COLOR,
-            marginTop: 10,
-          }}>
-          <Text
-            style={{
-              color: 'white',
-            }}
-          >{'Go back a screen this tab'}</Text>
-        </TouchableOpacity>
-        
+        <FlatList
+          data={currentSelection}
+          renderItem={({ item }) => <Text>{item.id}: {item.title}</Text>}
+        />
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate('PortfolioDetail')}
           style={{
@@ -67,3 +65,22 @@ export default class TabOneScreenTwo extends React.Component {
     );
   }
 }
+
+
+MainScreen.defaultProps = {
+  currentSelection: [],
+};
+
+const mapStateToProps = (state) => {
+  return {
+    category: state.portfolioReducer.category,
+    currentSelection: getCurrentSelection(state.portfolioReducer.category, state.portfolioReducer.all),
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionCreators, dispatch);
+}
+
+const PortfolioMain = connect(mapStateToProps, mapDispatchToProps)(MainScreen);
+export default PortfolioMain;

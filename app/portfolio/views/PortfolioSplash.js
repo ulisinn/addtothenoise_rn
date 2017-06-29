@@ -1,16 +1,20 @@
 'use strict';
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actionCreators from '../../actions/index';
+
+import { getCurrentSelection, getSplashScreenSelection } from '../../currentSelection';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 
-
-export default class PortfolioSplash extends React.Component {
+class SplashScreen extends React.Component {
   
   static navigationOptions = {
     title: '{addtothenoise}',
     headerBackTitle: null,
     headerTintColor: 'white',
-      headerBackTitleStyle: {
+    headerBackTitleStyle: {
       color: 'white',
       fontFamily: VEGUR_BOLD,
     },
@@ -26,6 +30,8 @@ export default class PortfolioSplash extends React.Component {
   };
   
   render() {
+    const { currentSelection } = this.props;
+    
     return (
       <View style={{
         flex: 1,
@@ -35,6 +41,10 @@ export default class PortfolioSplash extends React.Component {
         paddingTop: 20,
       }}>
         <Text>{'Portfolio Splash'}</Text>
+        <FlatList
+          data={currentSelection}
+          renderItem={({ item }) => <Text>{item.id}: {item.title}</Text>}
+        />
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate('PortfolioMain')}
           style={{
@@ -53,3 +63,22 @@ export default class PortfolioSplash extends React.Component {
     );
   }
 }
+
+
+SplashScreen.defaultProps = {
+  currentSelection: [],
+};
+
+const mapStateToProps = (state) => {
+  return {
+    category: state.portfolioReducer.category,
+    currentSelection: getSplashScreenSelection(state.portfolioReducer.category, state.portfolioReducer.all),
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionCreators, dispatch);
+}
+
+const PortfolioSplash = connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
+export default PortfolioSplash;
