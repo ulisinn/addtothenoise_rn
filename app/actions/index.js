@@ -51,8 +51,19 @@ export function initPortfolio(data: any) {
   };
 }
 
-//
+// SET CURRENT CATEGORY
 
+export function setCurrentCategory(currentCategory: string) {
+  
+  return {
+    type: INIT_PORTFOLIO,
+    payload: {
+      currentCategory,
+    },
+  };
+}
+
+// GET REMOTE DATA
 
 export function getRemoteData(url: string) {
   //console.log('getRemoteData url', url);
@@ -66,7 +77,7 @@ export function getRemoteData(url: string) {
         const list = createPortfolioList(items.sets);
         // console.log('getRemoteData THEN', list);
         
-        dispatch(initPortfolio({ portfolio: list }));
+        dispatch(initPortfolio({ all: list }));
         return dispatch(remoteLoadSuccess(items));
       })
       .catch(() => {
@@ -177,6 +188,7 @@ const createTextItem = (cat, obj) => {
     switch (k) {
       case '_title':
         textObj['title'] = v;
+        textObj['category'] = (v === 'oped') ? 'opinion' : v;
         break;
       case '_id':
         textObj['id'] = v;
@@ -191,7 +203,6 @@ const createTextItem = (cat, obj) => {
         textObj[k] = striptags(v);
         break;
     }
-    textObj['category'] = cat;
   });
   
   return textObj;
