@@ -8,6 +8,12 @@ export const MUTED_COLOR = '#8e8786';
 export const LINK_COLOR = '#48e9d9';
 export const ACCENT_COLORS = ['#d31d65', '#751c53', '#c248c0', '#7d6e8b', '#bbc6f7'];
 
+export const VEGUR_BOLD = 'Vegur-Bold';
+export const VEGUR_LIGHT = 'Vegur-Light';
+export const VEGUR_MEDIUM = 'Vegur-Medium';
+export const VEGUR_REGULAR = 'Vegur-Regular';
+
+
 export const COMMON_STYLES = StyleSheet.create({
   pageContainer: {
     backgroundColor: BG_COLOR,
@@ -20,19 +26,6 @@ export const COMMON_STYLES = StyleSheet.create({
   },
   text: {
     color: TEXT_COLOR,
-    fontFamily: 'Helvetica Neue',
+    fontFamily: VEGUR_BOLD,
   },
 });
-
-export const VEGUR_BOLD = 'Vegur-Bold';
-
-export const VegurLight = {
-  fontFamily: 'Vegur-Light',
-};
-
-export const VegurMedium = {
-  fontFamily: 'Vegur-Medium',
-};
-export const VegurRegular = {
-  fontFamily: 'Vegur-Regular',
-};
