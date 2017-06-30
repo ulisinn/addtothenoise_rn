@@ -1,13 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, View, Text } from 'react-native';
+import { Dimensions as RNDimensions } from 'react-native';
+import FastImage from 'react-native-fast-image';
+
 
 import * as globalStyles from '../styles/global';
 
-const ProjectImage = ({ src, style, ...rest }) => (
-  <View style={[style]}>
-    <Text>{src} </Text>
-    <Image source={{uri: src}} style={{width: 200, height: 200}} />
+const ProjectImage = ({ src, id, onImageLoad, style, ...rest }) => (
+  
+  <View style={[style, { alignSelf: 'stretch', }]}>
+    <Text>{id} </Text>
+    <FastImage onLoad={() => onImageLoad(id)}
+               source={{ uri: src, priority: FastImage.priority.normal, }}
+               style={{ width: 300, height: 200 }}
+               resizeMode={FastImage.resizeMode.contain}
+    />
   </View>
 );
 

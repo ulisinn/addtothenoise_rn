@@ -3,6 +3,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/index';
+import * as _ from 'lodash';
 
 import { getCurrentSelection, getSplashScreenSelection } from '../../currentSelection';
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
@@ -37,14 +38,21 @@ class SplashScreen extends React.Component {
     this.state = {
       numberOfImages: 0,
       images: [],
+      loadComplete: false,
     };
+    this.onImageLoad = this.onImageLoad.bind(this);
+    this.getSplashImages = this.getSplashImages.bind(this);
   }
   
   componentWillReceiveProps(newProps) {
     const numberOfImages = this.state.numberOfImages;
     if (newProps.currentSelection.length > 0 && numberOfImages !== newProps.currentSelection.length) {
       const images = newProps.currentSelection.map((d, i) => {
-        return { src: d.landingPageImage, loaded: false };
+        return {
+          id: d.id,
+          src: d.landingPageImage,
+          loaded: false,
+        };
       });
       this.setState({ numberOfImages: newProps.currentSelection.length, images: images });
     }
@@ -53,38 +61,106 @@ class SplashScreen extends React.Component {
   render() {
     const { currentSelection } = this.props;
     const { images } = this.state;
-    console.log('componentWillReceiveProps render', images);
+    const onImageLoad = this.onImageLoad;
+    const imageComponent = this.getSplashImages(images);
+    const imagesLoaded = _.every(this.state.images, ['loaded', true]);
     
-    return (
-      <View style={{
-        flex: 1,
-        // backgroundColor: 'red',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 20,
-      }}>
-        <ActivityIndicator size='large' />
-        <FlatList
-          data={images}
-          renderItem={({ item }) => <ProjectImage src={item.src}/>}
-        
-        />
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('PortfolioMain')}
-          style={{
-            padding: 10,
-            borderRadius: 10,
-            backgroundColor: TEXT_COLOR,
-            marginTop: 10,
+    console.log('onImageLoad render', images, imagesLoaded);
+    
+    if (imagesLoaded && images.length > 0) {
+      return (
+        <View style={{
+          flex: 1,
+          // backgroundColor: 'red',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingTop: 20,
+        }}>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            // backgroundColor: 'red',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: 20,
           }}>
-          <Text
+            {imageComponent}
+          </View>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('PortfolioMain')}
             style={{
-              color: 'white',
-            }}
-          >{'Portfolio Main'}</Text>
-        </TouchableOpacity>
-      </View>
-    );
+              padding: 10,
+              borderRadius: 10,
+              backgroundColor: TEXT_COLOR,
+              marginTop: 10,
+            }}>
+            <Text
+              style={{
+                color: 'white',
+              }}
+            >{'Portfolio Main'}</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <View style={{
+          flex: 1,
+          // backgroundColor: 'red',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingTop: 20,
+        }}>
+          <ActivityIndicator size='large' />
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            // backgroundColor: 'red',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: 20,
+          }}>
+            {imageComponent}
+          </View>
+        </View>
+      );
+    }
+    
+  }
+  
+  getSplashImages(images) {
+    const onImageLoad = this.onImageLoad;
+    
+    const imageComponent = images.map((item, i) => (
+      <ProjectImage
+        src={item.src}
+        id={item.id}
+        onImageLoad={(id) => onImageLoad(id)}
+        key={i}
+      />
+    ));
+    
+    console.log('getSplashImages', imageComponent);
+    return imageComponent;
+  }
+  
+  onImageLoad(id) {
+    const { images } = this.state;
+    const imageLoaded = images.map((d, i) => {
+      const obj = {
+          id: d.id,
+          loaded: d.loaded,
+          src: d.src,
+        }
+      ;
+      if (obj.id === id) {
+        obj.loaded = true;
+      }
+      return obj;
+    });
+    this.setState({ images: imageLoaded });
+    console.log(id, 'onImageLoad', this.state.images);
+    
   }
 }
 
