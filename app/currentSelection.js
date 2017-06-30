@@ -32,3 +32,9 @@ export const getSplashScreenSelection = (category, all) => {
   return res;
 };
 
+export const getSelectionById = (id, all) => {
+  
+  return all.filter((o) => {
+    return (o.id === id) ? true : false;
+  });
+};

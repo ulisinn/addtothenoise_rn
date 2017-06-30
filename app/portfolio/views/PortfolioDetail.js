@@ -1,16 +1,21 @@
 'use strict';
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as actionCreators from '../../actions/index';
+import { getSelectionById } from '../../currentSelection';
+
 import { View, Text, TouchableOpacity } from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 
 
-export default class PortfolioDetail extends React.Component {
+class PortfolioView extends React.Component {
   
   static navigationOptions = {
     title: '{addtothenoise}',
     headerBackTitle: null,
     headerTintColor: 'white',
-      headerBackTitleStyle: {
+    headerBackTitleStyle: {
       color: 'white',
       fontFamily: VEGUR_BOLD,
     },
@@ -26,6 +31,11 @@ export default class PortfolioDetail extends React.Component {
   };
   
   render() {
+    const id = (this.props.navigation.state.params.id) ? this.props.navigation.state.params.id : -1;
+    const { portfolio } = this.props;
+    const currentSelection = getSelectionById(id, portfolio);
+    // console.log('PortfolioDetail render', id, currentSelection, portfolio);
+    
     return (
       <View style={{
         flex: 1,
@@ -33,8 +43,27 @@ export default class PortfolioDetail extends React.Component {
         justifyContent: 'center',
         paddingTop: 20,
       }}>
-        <Text>{'Portfolio Detail'}</Text>
+        <Text>{currentSelection[0].title}</Text>
       </View>
     );
   }
 }
+
+
+PortfolioView.defaultProps = {
+  currentSelection: [],
+};
+
+const mapStateToProps = (state) => {
+  return {
+    category: state.portfolioReducer.category,
+    portfolio: state.portfolioReducer.all,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actionCreators, dispatch);
+}
+
+const PortfolioDetail = connect(mapStateToProps, mapDispatchToProps)(PortfolioView);
+export default PortfolioDetail;

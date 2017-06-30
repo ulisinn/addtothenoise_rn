@@ -129,7 +129,7 @@ const createPortfolioItem = (cat, obj) => {
     'use strict';
     switch (k) {
       case '_id':
-        portFolioObj['id'] = v;
+        portFolioObj['id'] = parseInt(v);
         break;
       case 'title':
         portFolioObj[k] = v;
@@ -191,7 +191,7 @@ const createTextItem = (cat, obj) => {
         textObj['category'] = (v === 'oped') ? 'opinion' : v;
         break;
       case '_id':
-        textObj['id'] = v;
+        textObj['id'] = parseInt(v);
         break;
       case 'author_family_name':
         textObj[k] = v;

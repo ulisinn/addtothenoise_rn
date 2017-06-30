@@ -45,7 +45,7 @@ class MainScreen extends React.Component {
           renderItem={({ item }) => <Text>{item.id}: {item.title}</Text>}
         />
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('PortfolioDetail')}
+          onPress={() => this.props.navigation.navigate('PortfolioDetail', { id: 11 })}
           style={{
             padding: 10,
             borderRadius: 10,
