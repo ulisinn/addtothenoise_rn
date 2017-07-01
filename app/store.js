@@ -22,7 +22,7 @@ export const REMOTE_DATA_READY = 'REMOTE_DATA_READY';
 export const INIT_PORTFOLIO = 'INIT_PORTFOLIO';
 
 export const SPLASH: string = 'splash';
-export const ALL: string = 'all';
+export const SET_CURRENT_CATEGORY: string = 'SET_CURRENT_CATEGORY';
 export const PRINT: string = 'print';
 export const WEB: string = 'web';
 export const OTHER: string = 'other';

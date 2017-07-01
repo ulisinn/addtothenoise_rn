@@ -81,6 +81,7 @@ class MainScreen extends React.Component {
   
   onNavPress(label) {
     console.log('onNavPress', label, store);
+    store.dispatch(actionCreators.setCurrentCategory(label));
     // this.props.navigation.navigate('PortfolioMain');
   }
 }
@@ -91,10 +92,11 @@ MainScreen.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const all = getCurrentSelection('all', state.portfolioReducer.all);
+  console.log('mapStateToProps', state.portfolioReducer);
+  const currentSelection = getCurrentSelection(state.portfolioReducer.category, state.portfolioReducer.all);
   return {
     category: state.portfolioReducer.category,
-    currentSelection: all,
+    currentSelection: currentSelection,
     portfolioPageIndex: state.tabOne.index,
   };
 };

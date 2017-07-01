@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/index';
 import * as _ from 'lodash';
+import store from '../../store';
 
 import { getCurrentSelection, getSplashScreenSelection } from '../../currentSelection';
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
@@ -148,6 +149,8 @@ class SplashScreen extends React.Component {
   
   onNavPress() {
     console.log('onNavPress');
+    store.dispatch(actionCreators.setCurrentCategory('ALL'));
+    
     this.props.navigation.navigate('PortfolioMain');
   }
   

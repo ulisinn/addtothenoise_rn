@@ -15,6 +15,7 @@ const REMOTE_LOAD_ERROR = 'REMOTE_LOAD_ERROR';
 const REMOTE_DATA_READY = 'REMOTE_DATA_READY';
 
 const INIT_PORTFOLIO = 'INIT_PORTFOLIO';
+const SET_CURRENT_CATEGORY = 'SET_CURRENT_CATEGORY';
 
 // REMOTE MESSAGES
 
@@ -56,7 +57,10 @@ export function initPortfolio(data: any) {
 export function setCurrentCategory(currentCategory: string) {
   
   return {
-    type: currentCategory,
+    type: SET_CURRENT_CATEGORY,
+    payload: {
+      currentCategory,
+    },
   };
 }
 

@@ -1,41 +1,35 @@
 import * as _ from 'lodash';
 
 const getPortfolioAll = (all) => {
-  const res = all.filter((o) => {
+  return all.filter((o) => {
     return (
       o.category === 'print' ||
       o.category === 'web' ||
-      o.category === 'other') ? true : false;
+      o.category === 'other');
   });
-  
-  console.log('getPortfolioAll', res);
-  return res;
 };
 
-export const getCurrentSelection = (category = 'all', all) => {
-  console.log('getCurrentSelection', category, all);
-  if (category === 'all') {
+export const getCurrentSelection = (category = 'ALL', all) => {
+  if (category === 'ALL') {
     return getPortfolioAll(all);
   }
   
-  return all.filter((o) => {
-    return (o.category === category) ? true : false;
+  return all.filter((o, i) => {
+    return (o.category === category.toLowerCase());
   });
   
 };
 
 export const getSplashScreenSelection = (category, all) => {
   
-  const res = all.filter((o) => {
-    return (o.displayLandingPageImage) ? true : false;
+  return all.filter((o) => {
+    return (o.displayLandingPageImage);
   });
-  
-  return res;
 };
 
 export const getSelectionById = (id, all) => {
   
   return all.filter((o) => {
-    return (o.id === id) ? true : false;
+    return (o.id === id);
   });
 };
