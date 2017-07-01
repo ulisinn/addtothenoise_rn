@@ -33,6 +33,7 @@ class MainScreen extends React.Component {
   constructor(props) {
     super(props);
     this.onNavPress = this.onNavPress.bind(this);
+    this.onNavigateToDetail = this.onNavigateToDetail.bind(this);
   }
   
   willReceiveProps(nextProps) {
@@ -43,6 +44,7 @@ class MainScreen extends React.Component {
     
     const { currentSelection } = this.props;
     const onNavPress = this.onNavPress;
+    const onNavigateToDetail = this.onNavigateToDetail;
     
     console.log('MainScreen render', currentSelection);
     return (
@@ -56,10 +58,11 @@ class MainScreen extends React.Component {
         
         <FlatList style={{ marginTop: 40 }}
                   data={currentSelection}
-                  renderItem={({ item }) => <Text>{item.id}: {item.title}</Text>}
+                  renderItem={({ item }) => <Text
+                    onPress={() => onNavigateToDetail(item.id)}>{item.id}: {item.title}</Text>}
         />
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('PortfolioDetail', { id: 11 })}
+          onPress={() => onNavigateToDetail(11)}
           style={{
             padding: 10,
             borderRadius: 10,
@@ -82,7 +85,10 @@ class MainScreen extends React.Component {
   onNavPress(label) {
     console.log('onNavPress', label, store);
     store.dispatch(actionCreators.setCurrentCategory(label));
-    // this.props.navigation.navigate('PortfolioMain');
+  }
+  
+  onNavigateToDetail(id) {
+    this.props.navigation.navigate('PortfolioDetail', { id });
   }
 }
 

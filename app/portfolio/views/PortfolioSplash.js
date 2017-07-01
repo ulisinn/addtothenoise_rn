@@ -45,6 +45,7 @@ class SplashScreen extends React.Component {
     this.onImageLoad = this.onImageLoad.bind(this);
     this.getSplashImages = this.getSplashImages.bind(this);
     this.onNavPress = this.onNavPress.bind(this);
+    this.onNavigateToDetail = this.onNavigateToDetail.bind(this);
   }
   
   componentWillReceiveProps(newProps) {
@@ -66,6 +67,7 @@ class SplashScreen extends React.Component {
     const { images } = this.state;
     const onImageLoad = this.onImageLoad;
     const onNavPress = this.onNavPress;
+    const onNavigateToDetail = this.onNavigateToDetail;
     const imageComponent = this.getSplashImages(images);
     const imagesLoaded = _.every(this.state.images, ['loaded', true]);
     
@@ -133,12 +135,14 @@ class SplashScreen extends React.Component {
   
   getSplashImages(images) {
     const onImageLoad = this.onImageLoad;
+    const onNavigateToDetail = this.onNavigateToDetail;
     
     const imageComponent = images.map((item, i) => (
       <ProjectImage
         src={item.src}
         id={item.id}
         onImageLoad={(id) => onImageLoad(id)}
+        onNavigateToDetail={(id) => onNavigateToDetail(id)}
         key={i}
       />
     ));
@@ -150,8 +154,13 @@ class SplashScreen extends React.Component {
   onNavPress() {
     console.log('onNavPress');
     store.dispatch(actionCreators.setCurrentCategory('ALL'));
-    
     this.props.navigation.navigate('PortfolioMain');
+  }
+  
+  onNavigateToDetail(id) {
+    console.log('onNavigateToDetail', id);
+    
+    this.props.navigation.navigate('PortfolioDetail', { id });
   }
   
   onImageLoad(id) {
