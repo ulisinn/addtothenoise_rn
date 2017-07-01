@@ -28,6 +28,12 @@ export default function portfolioReducer(state = intitialState, action) {
         category: (action.routeName === 'PortfolioMain') ? ALL : action.routeName,
       };
     
+    case ALL:
+      return {
+        ...state,
+        category: ALL,
+      };
+    
     default:
       console.log('****** INIT_PORTFOLIO', action.type);
       

@@ -28,4 +28,26 @@ export const COMMON_STYLES = StyleSheet.create({
     color: TEXT_COLOR,
     fontFamily: VEGUR_BOLD,
   },
+  localNavItem: {
+    borderLeftWidth: StyleSheet.hairlineWidth,
+    borderLeftColor: TEXT_COLOR,
+    borderRightWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: TEXT_COLOR,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderRightColor: TEXT_COLOR,
+    marginRight: 40,
+  },
+  localNav: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 10,
+  
+    // borderWidth: 1,
+  },
 });

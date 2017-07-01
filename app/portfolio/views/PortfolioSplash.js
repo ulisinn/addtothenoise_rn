@@ -11,6 +11,7 @@ import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 
 import DescriptionText from '../../components/DescriptionText';
 import ProjectImage from '../../components/ProjectImage';
+import LocalNav from '../../components/LocalNav';
 
 class SplashScreen extends React.Component {
   
@@ -38,10 +39,11 @@ class SplashScreen extends React.Component {
     this.state = {
       numberOfImages: 0,
       images: [],
-      loadComplete: false,
     };
+    
     this.onImageLoad = this.onImageLoad.bind(this);
     this.getSplashImages = this.getSplashImages.bind(this);
+    this.onNavPress = this.onNavPress.bind(this);
   }
   
   componentWillReceiveProps(newProps) {
@@ -62,6 +64,7 @@ class SplashScreen extends React.Component {
     const { currentSelection } = this.props;
     const { images } = this.state;
     const onImageLoad = this.onImageLoad;
+    const onNavPress = this.onNavPress;
     const imageComponent = this.getSplashImages(images);
     const imagesLoaded = _.every(this.state.images, ['loaded', true]);
     
@@ -69,15 +72,16 @@ class SplashScreen extends React.Component {
     
     if (imagesLoaded && images.length > 0) {
       return (
+        
         <View style={{
           flex: 1,
           // backgroundColor: 'red',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingTop: 20,
         }}>
+          <LocalNav label={['PORTFOLIO']} onNavPress={() => onNavPress()} />
           <View style={{
-            flex: 1,
+            // flex: 1,
             flexDirection: 'row',
             // backgroundColor: 'red',
             alignItems: 'center',
@@ -86,7 +90,7 @@ class SplashScreen extends React.Component {
           }}>
             {imageComponent}
           </View>
-          <TouchableOpacity
+          {/*          <TouchableOpacity
             onPress={() => this.props.navigation.navigate('PortfolioMain')}
             style={{
               padding: 10,
@@ -99,7 +103,7 @@ class SplashScreen extends React.Component {
                 color: 'white',
               }}
             >{'Portfolio Main'}</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
         </View>
       );
     } else {
@@ -109,16 +113,14 @@ class SplashScreen extends React.Component {
           // backgroundColor: 'red',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingTop: 20,
         }}>
           <ActivityIndicator size='large' />
           <View style={{
-            flex: 1,
             flexDirection: 'row',
-            // backgroundColor: 'red',
             alignItems: 'center',
             justifyContent: 'center',
             paddingTop: 20,
+            height: 0,
           }}>
             {imageComponent}
           </View>
@@ -140,8 +142,13 @@ class SplashScreen extends React.Component {
       />
     ));
     
-    console.log('getSplashImages', imageComponent);
+    // console.log('getSplashImages', imageComponent);
     return imageComponent;
+  }
+  
+  onNavPress() {
+    console.log('onNavPress');
+    this.props.navigation.navigate('PortfolioMain');
   }
   
   onImageLoad(id) {
@@ -159,7 +166,7 @@ class SplashScreen extends React.Component {
       return obj;
     });
     this.setState({ images: imageLoaded });
-    console.log(id, 'onImageLoad', this.state.images);
+    // console.log(id, 'onImageLoad', this.state.images);
     
   }
 }

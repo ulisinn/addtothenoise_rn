@@ -12,7 +12,8 @@ const getPortfolioAll = (all) => {
   return res;
 };
 
-export const getCurrentSelection = (category, all) => {
+export const getCurrentSelection = (category = 'all', all) => {
+  console.log('getCurrentSelection', category, all);
   if (category === 'all') {
     return getPortfolioAll(all);
   }

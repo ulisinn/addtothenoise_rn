@@ -52,7 +52,7 @@ export default class Main extends Component {
   
   render() {
     const state = store.getState().loadRemoteContent;
-    console.log('render', state);
+    console.log('Main render', state);
     if (!state.loadRemoteContent === REMOTE_LOAD_SUCCESS) {
       return null;
     } else {

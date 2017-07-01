@@ -3,10 +3,12 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/index';
+import store from '../../store';
 
 import { getCurrentSelection, getSplashScreenSelection } from '../../currentSelection';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
+import LocalNav from '../../components/LocalNav';
 
 class MainScreen extends React.Component {
   static navigationOptions = {
@@ -28,9 +30,19 @@ class MainScreen extends React.Component {
     },
   };
   
+  constructor(props) {
+    super(props);
+    this.onNavPress = this.onNavPress.bind(this);
+  }
+  
+  willReceiveProps(nextProps) {
+    console.log('MainScreen willReceiveProps', nextProps);
+  }
+  
   render() {
     
     const { currentSelection } = this.props;
+    const onNavPress = this.onNavPress;
     
     console.log('MainScreen render', currentSelection);
     return (
@@ -39,10 +51,12 @@ class MainScreen extends React.Component {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-        <Text>{'Portfolio Main'}</Text>
-        <FlatList
-          data={currentSelection}
-          renderItem={({ item }) => <Text>{item.id}: {item.title}</Text>}
+        <LocalNav label={['ALL', 'PRINT', 'WEB', 'OTHER', 'MUSIC']}
+                  onNavPress={(label) => onNavPress(label)} />
+        
+        <FlatList style={{ marginTop: 40 }}
+                  data={currentSelection}
+                  renderItem={({ item }) => <Text>{item.id}: {item.title}</Text>}
         />
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate('PortfolioDetail', { id: 11 })}
@@ -64,6 +78,11 @@ class MainScreen extends React.Component {
       </View>
     );
   }
+  
+  onNavPress(label) {
+    console.log('onNavPress', label, store);
+    // this.props.navigation.navigate('PortfolioMain');
+  }
 }
 
 
@@ -72,9 +91,11 @@ MainScreen.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
+  const all = getCurrentSelection('all', state.portfolioReducer.all);
   return {
     category: state.portfolioReducer.category,
-    currentSelection: getCurrentSelection(state.portfolioReducer.category, state.portfolioReducer.all),
+    currentSelection: all,
+    portfolioPageIndex: state.tabOne.index,
   };
 };
 

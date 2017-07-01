@@ -9,7 +9,7 @@ import * as globalStyles from '../styles/global';
 
 const ProjectImage = ({ src, id, onImageLoad, style, ...rest }) => (
   
-  <View style={[style, { alignSelf: 'stretch', }]}>
+  <View>
     <Text>{id} </Text>
     <FastImage onLoad={() => onImageLoad(id)}
                source={{ uri: src, priority: FastImage.priority.normal, }}

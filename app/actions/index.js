@@ -56,10 +56,7 @@ export function initPortfolio(data: any) {
 export function setCurrentCategory(currentCategory: string) {
   
   return {
-    type: INIT_PORTFOLIO,
-    payload: {
-      currentCategory,
-    },
+    type: currentCategory,
   };
 }
 
