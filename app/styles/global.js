@@ -37,6 +37,20 @@ export const COMMON_STYLES = StyleSheet.create({
     borderRightColor: TEXT_COLOR,
     marginRight: 40,
   },
+  localNavItemSelected: {
+    borderLeftWidth: StyleSheet.hairlineWidth,
+    borderLeftColor: TEXT_COLOR,
+    borderRightWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: TEXT_COLOR,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderRightColor: TEXT_COLOR,
+    backgroundColor: TEXT_COLOR,
+    marginRight: 40,
+  },
+  localNavTextSelected: {
+    color: 'white',
+    fontFamily: VEGUR_BOLD,
+  },
   localNav: {
     flex: 1,
     flexDirection: 'row',
@@ -47,7 +61,7 @@ export const COMMON_STYLES = StyleSheet.create({
     left: 0,
     width: '100%',
     zIndex: 10,
-  
+    
     // borderWidth: 1,
   },
 });

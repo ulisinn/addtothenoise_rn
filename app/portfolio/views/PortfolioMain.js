@@ -42,7 +42,7 @@ class MainScreen extends React.Component {
   
   render() {
     
-    const { currentSelection } = this.props;
+    const { currentSelection, category } = this.props;
     const onNavPress = this.onNavPress;
     const onNavigateToDetail = this.onNavigateToDetail;
     
@@ -54,30 +54,15 @@ class MainScreen extends React.Component {
         justifyContent: 'center',
       }}>
         <LocalNav label={['ALL', 'PRINT', 'WEB', 'OTHER', 'MUSIC']}
-                  onNavPress={(label) => onNavPress(label)} />
+                  onNavPress={(label) => onNavPress(label)}
+                  currentCategory={category}
+        />
         
         <FlatList style={{ marginTop: 40 }}
                   data={currentSelection}
                   renderItem={({ item }) => <Text
                     onPress={() => onNavigateToDetail(item.id)}>{item.id}: {item.title}</Text>}
         />
-        <TouchableOpacity
-          onPress={() => onNavigateToDetail(11)}
-          style={{
-            padding: 10,
-            borderRadius: 10,
-            backgroundColor: TEXT_COLOR,
-            marginTop: 10,
-          }}>
-          <Text
-            style={{
-              color: 'white',
-            }}
-          >
-            {'Portfolio Detail'}
-          </Text>
-        </TouchableOpacity>
-      
       </View>
     );
   }

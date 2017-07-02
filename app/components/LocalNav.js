@@ -20,14 +20,22 @@ export default class LocalNav extends Component {
   }
   
   getNavItems() {
-    const { onNavPress, label } = this.props;
+    const { onNavPress, label, currentCategory } = this.props;
     
     return label.map((d, i) => {
       const marginR = (i === label.length - 1) ? 30 : 10;
       
-      return <View key={i} style={[COMMON_STYLES.localNavItem, { marginRight: marginR }]}><Text
-        onPress={() => onNavPress(d)}
-        style={[COMMON_STYLES.text, { padding: 5, paddingTop: 7 }]}>{d}</Text></View>;
+      if (currentCategory !== d) {
+        return <View key={i} style={[COMMON_STYLES.localNavItem, { marginRight: marginR }]}><Text
+          onPress={() => onNavPress(d)}
+          style={[COMMON_STYLES.text, { padding: 5, paddingTop: 7 }]}>{d}</Text></View>;
+      } else {
+        return <View key={i} style={[COMMON_STYLES.localNavItemSelected, { marginRight: marginR }]}><Text
+          style={[COMMON_STYLES.localNavTextSelected, {
+            padding: 5,
+            paddingTop: 7,
+          }]}>{d}</Text></View>;
+      }
     });
   }
 }
