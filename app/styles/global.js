@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const BG_COLOR = '#ffffff';
 export const BAR_COLOR = '#4e4d52';
-export const TEXT_COLOR = '#bfbeb2';
+export const TEXT_COLOR = 'rgb(191,190,178)';
 export const HEADER_TEXT_COLOR = '#fff';
 export const MUTED_COLOR = '#8e8786';
 export const LINK_COLOR = '#48e9d9';

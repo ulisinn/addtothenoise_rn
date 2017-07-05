@@ -7,12 +7,25 @@ import * as _ from 'lodash';
 import store from '../../store';
 
 import { getCurrentSelection, getSplashScreenSelection } from '../../currentSelection';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  Animated,
+  Easing,
+} from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 
 import DescriptionText from '../../components/DescriptionText';
 import ProjectImage from '../../components/ProjectImage';
 import LocalNav from '../../components/LocalNav';
+import Dot from '../../components/Dot';
+import SplashDots from '../../components/SplashDots';
+
+
+const timer = require('react-native-timer');
 
 class SplashScreen extends React.Component {
   
@@ -40,73 +53,133 @@ class SplashScreen extends React.Component {
     this.state = {
       numberOfImages: 0,
       images: [],
+      fadeOut: true,
+      currentImageIndex: 0,
+      timeout: null,
     };
     
-    this.onImageLoad = this.onImageLoad.bind(this);
+    this.opacityValue = new Animated.Value(1);
+    
     this.getSplashImages = this.getSplashImages.bind(this);
     this.onNavPress = this.onNavPress.bind(this);
     this.onNavigateToDetail = this.onNavigateToDetail.bind(this);
+    this.startTimeout = this.startTimeout.bind(this);
+    this.sortImages = this.sortImages.bind(this);
+    this.fade = this.fade.bind(this);
+  }
+  
+  componentDidMount() {
+    //
+  }
+  
+  componentWillUnmount() {
+    clearTimeout(this.state.timeout);
+  }
+  
+  fade() {
+    const { currentImageIndex, images } = this.state;
+    const delay = 2000;
+    this.opacityValue.setValue(0);
+    // console.log('fade', currentImageIndex, delay);
+    const nextIndex = (currentImageIndex === images.length - 1) ? 0 : currentImageIndex + 1;
+    
+    this.setState({
+      currentImageIndex: nextIndex,
+    });
+    
+    Animated.timing(
+      this.opacityValue,
+      {
+        toValue: 1,
+        duration: 2000,
+        easing: Easing.linear,
+        delay: delay,
+      },
+    ).start(() => this.fade());
+  }
+  
+  startTimeout() {
+    // console.log(this, 'startTimeout', timer.timeoutExists(this, 'sortImages'));
+    const sortImages = this.sortImages;
+    const timeout = setTimeout(
+      (() => {
+        // console.log('timer');
+        return sortImages();
+      }),
+      6000,
+    );
+    this.setState({ timeout });
+  }
+  
+  sortImages() {
+    const images = this.state.images;
+    const currentImageIndex = this.state.currentImageIndex;
+    images.push(images.splice(0, 1)[0]);
+    // console.log(currentImageIndex, 'sortImages', images);
+    this.setState({ images });
+    timer.clearTimeout(this, 'sortImages');
+    this.setState({ currentImageIndex: (currentImageIndex >= images.length - 1) ? 0 : currentImageIndex + 1 });
+    this.startTimeout();
   }
   
   componentWillReceiveProps(newProps) {
     const numberOfImages = this.state.numberOfImages;
     if (newProps.currentSelection.length > 0 && numberOfImages !== newProps.currentSelection.length) {
       const images = newProps.currentSelection.map((d, i) => {
+        
         return {
           id: d.id,
+          description: d.alt,
           src: d.landingPageImage,
           loaded: false,
+          index: i,
         };
       });
-      this.setState({ numberOfImages: newProps.currentSelection.length, images: images });
+      this.setState({
+        numberOfImages: newProps.currentSelection.length,
+        images: images,
+        currentImageIndex: images.length - 1,
+      });
+      // this.fade();
+      this.startTimeout();
     }
   }
   
   render() {
+    const fadeVal = this.opacityValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+    });
     const { currentSelection } = this.props;
-    const { images } = this.state;
+    const { images, currentImageIndex } = this.state;
     const onImageLoad = this.onImageLoad;
     const onNavPress = this.onNavPress;
     const onNavigateToDetail = this.onNavigateToDetail;
-    const imageComponent = this.getSplashImages(images);
-    const imagesLoaded = _.every(this.state.images, ['loaded', true]);
+    const imageComponent = this.getSplashImages(images, currentImageIndex, fadeVal);
+    const splashDots = this.getSplashDots(images, currentImageIndex);
+    // const imagesLoaded = _.every(this.state.images, ['loaded', true]);
     
-    console.log('onImageLoad render', images, imagesLoaded);
     
-    if (imagesLoaded && images.length > 0) {
+    if (images.length > 0) {
       return (
-        
         <View style={{
           flex: 1,
-          // backgroundColor: 'red',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
           <LocalNav label={['PORTFOLIO']} onNavPress={() => onNavPress()} />
-          <View style={{
-            // flex: 1,
+          <Animated.View style={{
+            flex: 1,
+            width: '100%',
             flexDirection: 'row',
-            // backgroundColor: 'red',
             alignItems: 'center',
             justifyContent: 'center',
-            paddingTop: 20,
           }}>
             {imageComponent}
-          </View>
-          {/*          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('PortfolioMain')}
-            style={{
-              padding: 10,
-              borderRadius: 10,
-              backgroundColor: TEXT_COLOR,
-              marginTop: 10,
-            }}>
-            <Text
-              style={{
-                color: 'white',
-              }}
-            >{'Portfolio Main'}</Text>
-          </TouchableOpacity>*/}
+          </Animated.View>
+          <SplashDots style={{ width: 100 }} children={splashDots}>
+          
+          </SplashDots>
         </View>
       );
     } else {
@@ -117,70 +190,63 @@ class SplashScreen extends React.Component {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <ActivityIndicator size='large' />
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            paddingTop: 20,
-            height: 0,
+            backgroundColor: 'grey',
           }}>
             {imageComponent}
           </View>
+          <ActivityIndicator size='large' />
         </View>
       );
     }
     
   }
   
-  getSplashImages(images) {
-    const onImageLoad = this.onImageLoad;
+  getSplashImages(images, currentImageIndex, fadeVal) {
     const onNavigateToDetail = this.onNavigateToDetail;
     
-    const imageComponent = images.map((item, i) => (
-      <ProjectImage
+    const imageComponent = images.map((item, i) => {
+      // const opacity = (currentImageIndex === i) ? fadeVal : 1;
+      
+      return <ProjectImage
         src={item.src}
         id={item.id}
-        onImageLoad={(id) => onImageLoad(id)}
+        description={item.description}
         onNavigateToDetail={(id) => onNavigateToDetail(id)}
         key={i}
-      />
-    ));
-    
-    // console.log('getSplashImages', imageComponent);
+      />;
+    });
     return imageComponent;
   }
   
+  getSplashDots(images, currentImageIndex) {
+    const dots = images.map((item, i) => {
+      // // console.log('getSplashDots', images, currentImageIndex);
+      
+      const clr = (currentImageIndex === i) ? 'rgb(191,190,178)' : 'rgba(235,235,235,1)';
+      return <Dot
+        key={i} style={{
+        backgroundColor: clr,
+      }}
+      />;
+    });
+    return dots;
+  }
+  
   onNavPress() {
-    console.log('onNavPress');
+    // console.log('onNavPress');
     store.dispatch(actionCreators.setCurrentCategory('ALL'));
     this.props.navigation.navigate('PortfolioMain');
   }
   
   onNavigateToDetail(id) {
-    console.log('onNavigateToDetail', id);
-    
+    // console.log('onNavigateToDetail', id);
     this.props.navigation.navigate('PortfolioDetail', { id });
   }
   
-  onImageLoad(id) {
-    const { images } = this.state;
-    const imageLoaded = images.map((d, i) => {
-      const obj = {
-          id: d.id,
-          loaded: d.loaded,
-          src: d.src,
-        }
-      ;
-      if (obj.id === id) {
-        obj.loaded = true;
-      }
-      return obj;
-    });
-    this.setState({ images: imageLoaded });
-    // console.log(id, 'onImageLoad', this.state.images);
-    
-  }
 }
 
 

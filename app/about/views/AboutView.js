@@ -6,7 +6,7 @@ import * as actionCreators from '../../actions/index';
 
 import { getCurrentSelection } from '../../currentSelection';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
+import { VEGUR_BOLD, TEXT_COLOR, COMMON_STYLES } from '../../styles/global';
 
 class AboutView extends React.Component {
   
@@ -37,7 +37,8 @@ class AboutView extends React.Component {
         justifyContent: 'center',
         paddingTop: 20,
       }}>
-        <Text>{(currentSelection.length > 0) ? this.props.currentSelection[0].body : ''}</Text>
+        <Text
+          style={[COMMON_STYLES.text, { padding: 40 }]}>{(currentSelection.length > 0) ? this.props.currentSelection[0].body : ''}</Text>
       </View>
     );
   }
@@ -48,9 +49,10 @@ AboutView.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
+  console.log('AboutView', state);
   return {
     category: state.portfolioReducer.category,
-    currentSelection: getCurrentSelection(state.portfolioReducer.category, state.portfolioReducer.all),
+    currentSelection: getCurrentSelection('about', state.portfolioReducer.all),
   };
 };
 
