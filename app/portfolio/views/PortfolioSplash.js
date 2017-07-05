@@ -78,7 +78,6 @@ class SplashScreen extends React.Component {
     const { currentImageIndex, images } = this.state;
     const sortImages = this.sortImages;
     
-    const delay = 2000;
     this.opacityValue.setValue(1);
     
     Animated.timing(
@@ -87,7 +86,7 @@ class SplashScreen extends React.Component {
         toValue: 0,
         duration: 1000,
         easing: Easing.linear,
-        delay: delay,
+        useNativeDriver: true,
       },
     ).start(() => {
       return sortImages();
