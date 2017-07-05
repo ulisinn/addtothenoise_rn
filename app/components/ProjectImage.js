@@ -16,6 +16,8 @@ import FastImage from 'react-native-fast-image';
 
 import * as globalStyles from '../styles/global';
 
+const scale = 0.8;
+
 const ProjectImage = ({ src, id, description, onImageLoad, onNavigateToDetail, style, ...rest }) => (
   
   <Animated.View style={[style, styleSheet.splashView]}>
@@ -47,15 +49,14 @@ const styleSheet = StyleSheet.create({
   },
   splashView: {
     position: 'absolute',
-    width: Math.min(Dimensions.get('window').width, Dimensions.get('window').height) * 0.8,
+    width: Math.min(Dimensions.get('window').width, Dimensions.get('window').height) * scale,
     padding: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    backgroundColor: 'white',
   },
   image: {
-    width: Math.min(Dimensions.get('window').width, Dimensions.get('window').height) * 0.8,
-    height: Math.min(Dimensions.get('window').width, Dimensions.get('window').height) * 0.8 * 9 / 16,
+    width: Math.min(Dimensions.get('window').width, Dimensions.get('window').height) * scale,
+    height: Math.min(Dimensions.get('window').width, Dimensions.get('window').height) * scale * 9 / 16,
     
   },
 });

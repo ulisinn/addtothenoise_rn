@@ -25,8 +25,6 @@ import Dot from '../../components/Dot';
 import SplashDots from '../../components/SplashDots';
 
 
-const timer = require('react-native-timer');
-
 class SplashScreen extends React.Component {
   
   static navigationOptions = {
@@ -78,47 +76,42 @@ class SplashScreen extends React.Component {
   
   fade() {
     const { currentImageIndex, images } = this.state;
-    const delay = 2000;
-    this.opacityValue.setValue(0);
-    // console.log('fade', currentImageIndex, delay);
-    const nextIndex = (currentImageIndex === images.length - 1) ? 0 : currentImageIndex + 1;
+    const sortImages = this.sortImages;
     
-    this.setState({
-      currentImageIndex: nextIndex,
-    });
+    const delay = 2000;
+    this.opacityValue.setValue(1);
     
     Animated.timing(
       this.opacityValue,
       {
-        toValue: 1,
-        duration: 2000,
+        toValue: 0,
+        duration: 1000,
         easing: Easing.linear,
         delay: delay,
       },
-    ).start(() => this.fade());
+    ).start(() => {
+      return sortImages();
+    });
   }
   
   startTimeout() {
-    // console.log(this, 'startTimeout', timer.timeoutExists(this, 'sortImages'));
-    const sortImages = this.sortImages;
+    const fade = this.fade;
     const timeout = setTimeout(
       (() => {
-        // console.log('timer');
-        return sortImages();
+        return fade(); //sortImages();
       }),
-      6000,
+      4000,
     );
     this.setState({ timeout });
   }
   
   sortImages() {
+    this.opacityValue.setValue(1);
     const images = this.state.images;
-    const currentImageIndex = this.state.currentImageIndex;
-    images.push(images.splice(0, 1)[0]);
-    // console.log(currentImageIndex, 'sortImages', images);
+    const popped = images.pop();
+    images.splice(0, 0, popped);
     this.setState({ images });
-    timer.clearTimeout(this, 'sortImages');
-    this.setState({ currentImageIndex: (currentImageIndex >= images.length - 1) ? 0 : currentImageIndex + 1 });
+    this.setState({ currentImageIndex: (popped.index - 1 < 0) ? images.length - 1 : popped.index - 1 });
     this.startTimeout();
   }
   
@@ -140,7 +133,6 @@ class SplashScreen extends React.Component {
         images: images,
         currentImageIndex: images.length - 1,
       });
-      // this.fade();
       this.startTimeout();
     }
   }
@@ -152,12 +144,10 @@ class SplashScreen extends React.Component {
     });
     const { currentSelection } = this.props;
     const { images, currentImageIndex } = this.state;
-    const onImageLoad = this.onImageLoad;
     const onNavPress = this.onNavPress;
     const onNavigateToDetail = this.onNavigateToDetail;
     const imageComponent = this.getSplashImages(images, currentImageIndex, fadeVal);
     const splashDots = this.getSplashDots(images, currentImageIndex);
-    // const imagesLoaded = _.every(this.state.images, ['loaded', true]);
     
     
     if (images.length > 0) {
@@ -171,22 +161,19 @@ class SplashScreen extends React.Component {
           <Animated.View style={{
             flex: 1,
             width: '100%',
-            flexDirection: 'row',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
             {imageComponent}
           </Animated.View>
-          <SplashDots style={{ width: 100 }} children={splashDots}>
-          
-          </SplashDots>
+          <SplashDots style={{ width: 100 }} children={splashDots} />
         </View>
       );
     } else {
       return (
         <View style={{
           flex: 1,
-          // backgroundColor: 'red',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
@@ -209,14 +196,14 @@ class SplashScreen extends React.Component {
     const onNavigateToDetail = this.onNavigateToDetail;
     
     const imageComponent = images.map((item, i) => {
-      // const opacity = (currentImageIndex === i) ? fadeVal : 1;
-      
+      const opacity = (i === images.length - 1) ? fadeVal : 1;
       return <ProjectImage
         src={item.src}
         id={item.id}
         description={item.description}
         onNavigateToDetail={(id) => onNavigateToDetail(id)}
         key={i}
+        style={{ opacity }}
       />;
     });
     return imageComponent;
@@ -224,8 +211,6 @@ class SplashScreen extends React.Component {
   
   getSplashDots(images, currentImageIndex) {
     const dots = images.map((item, i) => {
-      // // console.log('getSplashDots', images, currentImageIndex);
-      
       const clr = (currentImageIndex === i) ? 'rgb(191,190,178)' : 'rgba(235,235,235,1)';
       return <Dot
         key={i} style={{

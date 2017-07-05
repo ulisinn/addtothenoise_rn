@@ -22,9 +22,9 @@ const styles = StyleSheet.create(
     container: {
       // flex: 1,
       alignContent: 'center',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: 'row-reverse',
       height: 20,
+      justifyContent: 'space-between',
     },
   },
 );
