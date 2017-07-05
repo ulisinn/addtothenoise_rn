@@ -19,7 +19,7 @@ import {
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 
 import DescriptionText from '../../components/DescriptionText';
-import ProjectImage from '../../components/ProjectImage';
+import ProjectImage from '../../components/SplashImage';
 import LocalNav from '../../components/LocalNav';
 import Dot from '../../components/Dot';
 import SplashDots from '../../components/SplashDots';

@@ -9,6 +9,7 @@ import { getCurrentSelection, getSplashScreenSelection } from '../../currentSele
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 import LocalNav from '../../components/LocalNav';
+import PortfolioMainItem from '../../components/PortfolioMainItem';
 
 class MainScreen extends React.Component {
   static navigationOptions = {
@@ -34,6 +35,7 @@ class MainScreen extends React.Component {
     super(props);
     this.onNavPress = this.onNavPress.bind(this);
     this.onNavigateToDetail = this.onNavigateToDetail.bind(this);
+    this.getListItem = this.getListItem.bind(this);
   }
   
   willReceiveProps(nextProps) {
@@ -45,6 +47,7 @@ class MainScreen extends React.Component {
     const { currentSelection, category } = this.props;
     const onNavPress = this.onNavPress;
     const onNavigateToDetail = this.onNavigateToDetail;
+    const getListItem = this.getListItem;
     
     console.log('MainScreen render', currentSelection);
     return (
@@ -58,13 +61,34 @@ class MainScreen extends React.Component {
                   currentCategory={category}
         />
         
-        <FlatList style={{ marginTop: 40 }}
+        {/*        <FlatList style={{ marginTop: 40 }}
                   data={currentSelection}
                   renderItem={({ item }) => <Text
                     onPress={() => onNavigateToDetail(item.id)}>{item.id}: {item.title}</Text>}
+        /> */}
+        
+        <FlatList style={{ marginTop: 40 }}
+                  data={currentSelection}
+                  renderItem={({ item }) => <PortfolioMainItem
+                    onNavigateToDetail={() => onNavigateToDetail(item.id)}
+                    src={item.mainImage}
+                    id={item.id}
+                    description={item.title}
+                  />}
         />
       </View>
     );
+  }
+  
+  getListItem(item) {
+    const onNavigateToDetail = this.onNavigateToDetail;
+    console.log('getListItem', item);
+    return <PortfolioMainItem
+      onNavigateToDetail={() => onNavigateToDetail(item.id)}
+      src={item.src}
+      id={item.id}
+      description={item.title}
+    />;
   }
   
   onNavPress(label) {

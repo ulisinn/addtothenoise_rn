@@ -18,7 +18,7 @@ import * as globalStyles from '../styles/global';
 
 const scale = 0.8;
 
-const ProjectImage = ({ src, id, description, onImageLoad, onNavigateToDetail, style, ...rest }) => (
+const SplashImage = ({ src, id, description, onImageLoad, onNavigateToDetail, style, ...rest }) => (
   
   <Animated.View style={[style, styleSheet.splashView]}>
     <View style={[styleSheet.borderLeft]}><Text
@@ -37,7 +37,7 @@ const ProjectImage = ({ src, id, description, onImageLoad, onNavigateToDetail, s
   </Animated.View>
 );
 
-ProjectImage.propTypes = {
+SplashImage.propTypes = {
   src: PropTypes.string,
 };
 
@@ -63,4 +63,4 @@ const styleSheet = StyleSheet.create({
   },
 });
 
-export default ProjectImage;
+export default SplashImage;
