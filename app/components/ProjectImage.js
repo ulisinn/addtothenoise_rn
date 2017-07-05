@@ -46,6 +46,8 @@ const styleSheet = StyleSheet.create({
     borderLeftWidth: 5,
     borderColor: globalStyles.TEXT_COLOR,
     paddingLeft: 5,
+    backgroundColor: 'white',
+    width: '100%',
   },
   splashView: {
     position: 'absolute',
