@@ -10,6 +10,7 @@ import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { VEGUR_BOLD, TEXT_COLOR } from '../../styles/global';
 import LocalNav from '../../components/LocalNav';
 import PortfolioMainItem from '../../components/PortfolioMainItem';
+import MusicMainItem from '../../components/MusicMainItem';
 
 class MainScreen extends React.Component {
   static navigationOptions = {
@@ -61,20 +62,11 @@ class MainScreen extends React.Component {
                   currentCategory={category}
         />
         
-        {/*        <FlatList style={{ marginTop: 40 }}
-                  data={currentSelection}
-                  renderItem={({ item }) => <Text
-                    onPress={() => onNavigateToDetail(item.id)}>{item.id}: {item.title}</Text>}
-        /> */}
-        
         <FlatList style={{ marginTop: 40 }}
                   data={currentSelection}
-                  renderItem={({ item }) => <PortfolioMainItem
-                    onNavigateToDetail={() => onNavigateToDetail(item.id)}
-                    src={item.mainImage}
-                    id={item.id}
-                    description={item.title}
-                  />}
+                  renderItem={({ item }) => {
+                    return getListItem(item);
+                  }}
         />
       </View>
     );
@@ -82,13 +74,27 @@ class MainScreen extends React.Component {
   
   getListItem(item) {
     const onNavigateToDetail = this.onNavigateToDetail;
-    console.log('getListItem', item);
-    return <PortfolioMainItem
-      onNavigateToDetail={() => onNavigateToDetail(item.id)}
-      src={item.src}
-      id={item.id}
-      description={item.title}
-    />;
+    const { category } = this.props;
+    console.log(category, 'getListItem', item.backgroundColor);
+    
+    return (category === 'MUSIC') ? <MusicMainItem
+        onNavigateToDetail={() => onNavigateToDetail(item.id)}
+        src={item.mainImage}
+        id={item.id}
+        key={item.id}
+        description={item.title}
+        category={category}
+        backgroundColor={item.backgroundColor}
+      />
+      :
+      <PortfolioMainItem
+        onNavigateToDetail={() => onNavigateToDetail(item.id)}
+        src={item.mainImage}
+        id={item.id}
+        key={item.id}
+        description={item.title}
+        category={category}
+      />;
   }
   
   onNavPress(label) {

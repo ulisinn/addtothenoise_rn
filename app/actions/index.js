@@ -142,7 +142,7 @@ const createPortfolioItem = (cat, obj) => {
         portFolioObj[k] = v;
         break;
       case 'description':
-        portFolioObj[k] = v;
+        portFolioObj[k] = striptags(v);
         break;
       case 'backgroundColor':
         portFolioObj[k] = v;

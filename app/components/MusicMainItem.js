@@ -16,33 +16,26 @@ import * as globalStyles from '../styles/global';
 
 const scale = 0.8;
 
-const PortfolioMainItem = ({ src, id, description, category, onImageLoad, onNavigateToDetail, style, ...rest }) => (
+const MusicMainItem = ({ src, id, description, category, backgroundColor, onImageLoad, onNavigateToDetail, style, ...rest }) => (
   
-  <View style={[style, styleSheet.splashView]}>
+  <View
+    style={[style, styleSheet.splashView, { backgroundColor: backgroundColor, marginBottom: 20 }]}>
     
     <TouchableWithoutFeedback onPress={() => onNavigateToDetail(id)}>
-      <View style={[styleSheet.imageWrapper]}>
-        <Image resizeMode='cover'
-               onLoadStart={() => {
-                 console.log('Image onLoadStart', Image.getSize(src, (width, height) => {
-                   console.log('\tImage.getSize', width, height, category);
-                 }));
-                 // onImageLoad(id);
-               }}
-               source={{ uri: src }}
-               style={[styleSheet.image]}
-        />
+      <View>
+        <Text
+          style={[globalStyles.COMMON_STYLES.text, {
+            marginTop: 7,
+            marginBottom: 25,
+            color: 'white',
+            paddingLeft: 10,
+          }]}>{description.toUpperCase()}</Text>
       </View>
     </TouchableWithoutFeedback>
-    <Text
-      style={[globalStyles.COMMON_STYLES.text, {
-        marginTop: 10,
-        marginBottom: 25,
-      }]}>{description.toUpperCase()} </Text>
   </View>
 );
 
-PortfolioMainItem.propTypes = {
+MusicMainItem.propTypes = {
   src: PropTypes.string,
 };
 
@@ -65,4 +58,4 @@ const styleSheet = StyleSheet.create({
   },
 });
 
-export default PortfolioMainItem;
+export default MusicMainItem;
