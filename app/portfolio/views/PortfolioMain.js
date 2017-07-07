@@ -3,6 +3,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/index';
+import * as _ from 'lodash';
 import store from '../../store';
 
 import { getCurrentSelection, getSplashScreenSelection } from '../../currentSelection';
@@ -43,6 +44,11 @@ class MainScreen extends React.Component {
     console.log('MainScreen willReceiveProps', nextProps);
   }
   
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('......... nextProps', nextProps.category, this.props.category);
+    return (nextProps.category !== this.props.category);
+  }
+  
   render() {
     
     const { currentSelection, category } = this.props;
@@ -75,7 +81,7 @@ class MainScreen extends React.Component {
   getListItem(item) {
     const onNavigateToDetail = this.onNavigateToDetail;
     const { category } = this.props;
-    console.log(category, 'getListItem', item.backgroundColor);
+    // console.log(category, 'getListItem', item.backgroundColor);
     
     return (category === 'MUSIC') ? <MusicMainItem
         onNavigateToDetail={() => onNavigateToDetail(item.id)}
@@ -114,7 +120,7 @@ MainScreen.defaultProps = {
 
 const mapStateToProps = (state) => {
   console.log('mapStateToProps', state.portfolioReducer);
-  const currentSelection = getCurrentSelection(state.portfolioReducer.category, state.portfolioReducer.all);
+  const currentSelection = _.shuffle(getCurrentSelection(state.portfolioReducer.category, state.portfolioReducer.all));
   return {
     category: state.portfolioReducer.category,
     currentSelection: currentSelection,

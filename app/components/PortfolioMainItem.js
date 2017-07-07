@@ -13,6 +13,7 @@ import {
 import { Dimensions as RNDimensions } from 'react-native';
 
 import * as globalStyles from '../styles/global';
+import FastImage from 'react-native-fast-image';
 
 const scale = 0.8;
 
@@ -22,15 +23,15 @@ const PortfolioMainItem = ({ src, id, description, category, onImageLoad, onNavi
     
     <TouchableWithoutFeedback onPress={() => onNavigateToDetail(id)}>
       <View style={[styleSheet.imageWrapper]}>
-        <Image resizeMode='cover'
-               onLoadStart={() => {
-                 console.log('Image onLoadStart', Image.getSize(src, (width, height) => {
-                   console.log('\tImage.getSize', width, height, category);
-                 }));
-                 // onImageLoad(id);
-               }}
-               source={{ uri: src }}
-               style={[styleSheet.image]}
+        <FastImage resizeMode='cover'
+                   onLoadStart={() => {
+                     console.log('Image onLoadStart', Image.getSize(src, (width, height) => {
+                       console.log('\tImage.getSize', width, height, category);
+                     }));
+                     // onImageLoad(id);
+                   }}
+                   source={{ uri: src }}
+                   style={[styleSheet.image]}
         />
       </View>
     </TouchableWithoutFeedback>
