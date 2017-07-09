@@ -41,11 +41,11 @@ class MainScreen extends React.Component {
   }
   
   willReceiveProps(nextProps) {
-    console.log('MainScreen willReceiveProps', nextProps);
+    //console.log('MainScreen willReceiveProps', nextProps);
   }
   
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('......... nextProps', nextProps.category, this.props.category);
+    //console.log('......... nextProps', nextProps.category, this.props.category);
     return (nextProps.category !== this.props.category);
   }
   
@@ -56,7 +56,7 @@ class MainScreen extends React.Component {
     const onNavigateToDetail = this.onNavigateToDetail;
     const getListItem = this.getListItem;
     
-    console.log('MainScreen render', currentSelection);
+    //console.log('MainScreen render', currentSelection);
     return (
       <View style={{
         flex: 1,
@@ -104,7 +104,7 @@ class MainScreen extends React.Component {
   }
   
   onNavPress(label) {
-    console.log('onNavPress', label, store);
+    //console.log('onNavPress', label, store);
     store.dispatch(actionCreators.setCurrentCategory(label));
   }
   
@@ -119,7 +119,7 @@ MainScreen.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  console.log('mapStateToProps', state.portfolioReducer);
+  //console.log('mapStateToProps', state.portfolioReducer);
   const currentSelection = _.shuffle(getCurrentSelection(state.portfolioReducer.category, state.portfolioReducer.all));
   return {
     category: state.portfolioReducer.category,

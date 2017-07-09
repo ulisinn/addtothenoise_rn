@@ -25,9 +25,9 @@ const PortfolioMainItem = ({ src, id, description, category, onImageLoad, onNavi
       <View style={[styleSheet.imageWrapper]}>
         <FastImage resizeMode='cover'
                    onLoadStart={() => {
-                     console.log('Image onLoadStart', Image.getSize(src, (width, height) => {
+        /*             console.log('Image onLoadStart', Image.getSize(src, (width, height) => {
                        console.log('\tImage.getSize', width, height, category);
-                     }));
+                     }));*/
                      // onImageLoad(id);
                    }}
                    source={{ uri: src }}

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>addtothenoise_rn</string>
+	<string>addtothenoise</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -46,10 +46,6 @@
 	<string/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Vegur-B_0_600.ttf</string>
-		<string>Vegur-L_0600.ttf</string>
-		<string>Vegur-M_0600.ttf</string>
-		<string>Vegur-R_0_600.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
 		<string>FontAwesome.ttf</string>
@@ -60,6 +56,10 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Vegur-B_0_600.ttf</string>
+		<string>Vegur-L_0600.ttf</string>
+		<string>Vegur-M_0600.ttf</string>
+		<string>Vegur-R_0_600.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

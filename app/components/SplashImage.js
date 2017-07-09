@@ -26,7 +26,7 @@ const SplashImage = ({ src, id, description, onImageLoad, onNavigateToDetail, st
     <TouchableWithoutFeedback onPress={() => onNavigateToDetail(id)}>
       <View style={[{ marginTop: 15 }]}>
         <FastImage onLoad={() => {
-          console.log('FastImage onLoad');
+          //console.log('FastImage onLoad');
           // onImageLoad(id);
         }}
                    source={{ uri: src, priority: FastImage.priority.normal, }}

@@ -8,4 +8,7 @@ import {
 
 import Main from './app/main';
 
-AppRegistry.registerComponent('addtothenoise_rn', () => Main);
+AppRegistry.registerComponent('addtothenoise', () => Main);
+
+
+// import './MyRect';

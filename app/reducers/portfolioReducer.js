@@ -15,7 +15,7 @@ export default function portfolioReducer(state = intitialState, action) {
   //console.log('INIT_PORTFOLIO', action.type);
   switch (action.type) {
     case INIT_PORTFOLIO: {
-      console.log('====== INIT_PORTFOLIO', action.payload.data);
+      //console.log('====== INIT_PORTFOLIO', action.payload.data);
       return {
         ...state,
         ...action.payload.data,
@@ -23,7 +23,7 @@ export default function portfolioReducer(state = intitialState, action) {
     }
     
     case SET_CURRENT_CATEGORY:
-      console.log('****** SET_CURRENT_CATEGORY', action);
+      //console.log('****** SET_CURRENT_CATEGORY', action);
       
       return {
         ...state,
@@ -31,7 +31,7 @@ export default function portfolioReducer(state = intitialState, action) {
       };
     
     default:
-      console.log('****** INIT_PORTFOLIO', action.type);
+      // console.log('****** INIT_PORTFOLIO', action.type, state);
       
       return state;
   }

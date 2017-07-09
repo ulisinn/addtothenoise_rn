@@ -16,11 +16,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"
 
-@interface addtothenoise_rnTests : XCTestCase
+@interface addtothenoiseTests : XCTestCase
 
 @end
 
-@implementation addtothenoise_rnTests
+@implementation addtothenoiseTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

@@ -37,12 +37,12 @@ export default class Main extends Component {
   }
   
   getDimensions = (evt = {}) => {
-    console.log('Dimensions', Dimensions.get('window'));
+    //console.log('Dimensions', Dimensions.get('window'));
     return Dimensions;
   };
   
   onLayoutChanged = (evt) => {
-    console.log('===== onLayoutChanged', evt);
+    //console.log('===== onLayoutChanged', evt);
     return this.getDimensions(evt);
   };
   
@@ -52,7 +52,7 @@ export default class Main extends Component {
   
   render() {
     const state = store.getState().loadRemoteContent;
-    console.log('Main render', state);
+    //console.log('Main render', state);
     if (!state.loadRemoteContent === REMOTE_LOAD_SUCCESS) {
       return null;
     } else {

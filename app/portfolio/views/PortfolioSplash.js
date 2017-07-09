@@ -134,6 +134,7 @@ class SplashScreen extends React.Component {
       });
       this.startTimeout();
     }
+    console.log('SplashScreen componentWillReceiveProps', newProps);
   }
   
   render() {

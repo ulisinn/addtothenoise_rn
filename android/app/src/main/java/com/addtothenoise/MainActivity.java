@@ -1,4 +1,4 @@
-package com.addtothenoise_rn;
+package com.addtothenoise;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "addtothenoise_rn";
+        return "addtothenoise";
     }
 }
