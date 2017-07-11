@@ -13,6 +13,8 @@ import Svg, {
   Rect,
 } from 'react-native-svg';
 
+import AudioControls from '../../components/AudioControls';
+
 class PortfolioView extends React.Component {
   
   static navigationOptions = {
@@ -34,19 +36,28 @@ class PortfolioView extends React.Component {
     },
   };
   
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAudio: false,
+      currentSound: null,
+      soundIsLoaded: false,
+    };
+  }
+  
   componentWillMount() {
     const id = (this.props.navigation.state.params.id) ? this.props.navigation.state.params.id : -1;
     const { portfolio } = this.props;
     const currentSelection = getSelectionById(id, portfolio);
     console.log('PortfolioDetail componentWillMount', currentSelection[0], currentSelection[0].mpeg);
     
-    const whoosh = new Sound(currentSelection[0].mpeg, '', (error) => {
+    const currentSound = new Sound(currentSelection[0].mpeg, '', (error) => {
       if (error) {
         console.log('failed to load the sound', error);
         return;
       }
       // loaded successfully
-      console.log('duration in seconds: ' + whoosh.getDuration() + 'number of channels: ' + whoosh.getNumberOfChannels());
+      console.log('duration in seconds: ' + currentSound.getDuration() + 'number of channels: ' + currentSound.getNumberOfChannels());
     });
     
   }
@@ -70,23 +81,8 @@ class PortfolioView extends React.Component {
     const { title, controlsColor } = currentSelection;
     console.log('PortfolioDetail render', this.props);
     
-    return (<View>
-        <Svg
-          width="300"
-          height="160"
-        >
-          <Rect
-            x="5%"
-            y="5%"
-            width="90%"
-            height="90%"
-            fill="rgb(0,0,255)"
-            strokeWidth="3"
-            stroke="rgb(0,0,0)"
-            strokeDasharray="5,10"
-          />
-        </Svg>
-      </View>
+    return (
+      <AudioControls />
     );
   }
 }
