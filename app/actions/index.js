@@ -147,6 +147,9 @@ const createPortfolioItem = (cat, obj) => {
       case 'backgroundColor':
         portFolioObj[k] = v;
         break;
+      case 'controlsColor':
+        portFolioObj[k] = v;
+        break;
       case 'thumbnail':
         portFolioObj[k] = (v && v.src) ? baseUrl + v.src : null;
         break;
