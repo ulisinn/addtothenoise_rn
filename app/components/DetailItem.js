@@ -21,4 +21,13 @@ export default class DetailItem extends Component {
   constructor(props) {
     super(props);
   }
+  
+  render() {
+    const { title } = this.props;
+    return (
+      <View>
+        <Text>{title}</Text>
+      </View>
+    );
+  }
 }

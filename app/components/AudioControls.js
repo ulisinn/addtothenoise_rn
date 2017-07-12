@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 
 import {
-  AppRegistry,
   StyleSheet,
   View,
   ScrollView,
@@ -13,6 +12,7 @@ import {
   Easing,
   Dimensions,
   Text,
+  ActivityIndicator,
 } from 'react-native';
 
 import Svg, {
@@ -23,6 +23,9 @@ import Svg, {
 } from 'react-native-svg';
 
 import { Text as SvgText } from 'react-native-svg';
+import moment from 'moment';
+import * as globalStyles from '../styles/global';
+
 
 import Slider from 'react-native-slider';
 
@@ -33,61 +36,130 @@ export default class AudioControls extends Component {
       value: 0.8,
       isPaused: true,
       isMuted: false,
-      totalTime: '00:00',
-      currentTime: '00:00',
+      currentTime: 0,
+      heartbeat: null,
     };
     
     this.togglePlayState = this.togglePlayState.bind(this);
     this.toggleMuteState = this.toggleMuteState.bind(this);
     this.getPlayButton = this.getPlayButton.bind(this);
+    this.startTimer = this.startTimer.bind(this);
+    this.setVolume = this.setVolume.bind(this);
+  }
+  
+  componentWillMount() {
+    console.log('AudioControls componentWillMount', this.props.currentSound);
+  }
+  
+  componentWillReceiveProps(newProps) {
+    if (newProps.currentSound && this.state.heartbeat === null) {
+      this.startTimer();
+    }
+    console.log('AudioControls componentWillReceiveProps', newProps.currentSound);
+  }
+  
+  componentWillUpdate(nextProps, nextState) {
+    console.log('AudioControls componentWillUpdate', nextProps, nextState);
+  }
+  
+  componentWillUnmount() {
+    const { currentSound } = this.props;
+    const { heartbeat } = this.state;
+    
+    if (currentSound) {
+      currentSound.stop();
+      currentSound.release();
+    }
+    clearInterval(heartbeat);
+    console.log('AudioControls componentWillUnmount', currentSound);
   }
   
   render() {
-    const { currentTime, totalTime, isMuted } = this.state;
+    const { currentTime, isMuted } = this.state;
+    const { controlsColor, backgroundColor, title, totalDuration, currentSound } = this.props;
     const togglePlayState = this.togglePlayState;
+    
+    const totalTime = moment.duration(totalDuration, 'seconds');
+    const parsedTotalMinutes = (parseInt(totalTime.minutes()) < 10) ? '0' + totalTime.minutes() : totalTime.minutes();
+    const parsedTotalSeconds = (parseInt(totalTime.seconds()) < 10) ? '0' + totalTime.seconds() : totalTime.seconds();
+    
+    const currentElapsedTime = moment.duration(currentTime, 'seconds');
+    const parsedCurrentMinutes = (parseInt(currentElapsedTime.minutes()) < 10) ? '0' + currentElapsedTime.minutes() : currentElapsedTime.minutes();
+    const parsedCurrentSeconds = (parseInt(currentElapsedTime.seconds()) < 10) ? '0' + currentElapsedTime.seconds() : currentElapsedTime.seconds();
+    
+    if (!currentSound) {
+      return (
+        <View style={[styles.container]}>
+          <View style={[styles.controls, {
+            borderColor: controlsColor,
+            backgroundColor: backgroundColor,
+            width: 300,
+            height: 134,
+          }]}>
+            <Text style={[globalStyles.COMMON_STYLES.text, {
+              color: 'white',
+              margin: 8,
+              position: 'absolute',
+              top: 0,
+            }]}>{title}</Text>
+            <ActivityIndicator size='large' color={controlsColor} />
+          </View>
+        </View>
+      );
+    }
     
     return (
       <View style={[styles.container]}>
         <View style={[styles.controls, {
-          borderColor: this.props.controlsColor,
-          backgroundColor: this.props.backgroundColor,
+          borderColor: controlsColor,
+          backgroundColor: backgroundColor,
         }]}>
-          <Text style={[{ color: this.props.controlsColor }]}>{this.props.title}</Text>
+          <Text style={[globalStyles.COMMON_STYLES.text, {
+            color: 'white',
+            marginBottom: 8,
+          }]}>{title}</Text>
           
           <Svg style={[styles.border]}
-               width="300"
+               width="280"
                height="50">
             {this.getPlayButton()}
             
             <G id='durationText'>
               <SvgText
-                fill={this.props.controlsColor}
+                fill={controlsColor}
                 fontSize="17"
-                x="138"
+                x="48%"
                 y="13.5"
                 textAnchor="middle"
-              >{currentTime} / {totalTime}</SvgText>
+              >{`${parsedCurrentMinutes}:${parsedCurrentSeconds}`}
+                / {`${parsedTotalMinutes}:${parsedTotalSeconds}`}</SvgText>
             </G>
             {this.getSpeakerButton()}
           
           </Svg>
           <Slider style={[styles.border]}
                   width={200}
-                  thumbTintColor={this.props.controlsColor}
-                  minimumTrackTintColor={this.props.controlsColor}
-                  maximumTrackTintColor={`${this.props.controlsColor}33`}
+                  thumbTintColor={controlsColor}
+                  minimumTrackTintColor={controlsColor}
+                  maximumTrackTintColor={`${controlsColor}33`}
                   minimumValue={0}
                   maximumValue={1}
                   value={(isMuted) ? 0 : this.state.value}
-                  onValueChange={(value) => this.setState({ value })} />
+                  onValueChange={(value) => this.setVolume(value)} />
         
-        </View></View>
+        </View>
+      </View>
     );
   }
   
   getPlayButton() {
     const { isPaused } = this.state;
+    const { currentSound } = this.props;
     const togglePlayState = this.togglePlayState;
+    
+    if (!currentSound) {
+      return null;
+    }
     
     if (isPaused) {
       return (
@@ -128,12 +200,16 @@ export default class AudioControls extends Component {
   
   getSpeakerButton() {
     const { isMuted } = this.state;
+    const { currentSound } = this.props;
     const toggleMuteState = this.toggleMuteState;
     
+    if (!currentSound) {
+      return null;
+    }
     if (isMuted) {
       return (
         <G id='mutedSpeaker'
-           x='-27'
+           x='-45'
            onPress={() => toggleMuteState()}
         >
           <Rect fill='rgba(255,255,255,0.001)'
@@ -162,7 +238,7 @@ export default class AudioControls extends Component {
     } else {
       return (
         <G id='unMutedSpeaker'
-           x='-27'
+           x='-45'
            onPress={() => toggleMuteState()}
         >
           <Rect fill='rgba(255,255,255,0.001)'
@@ -203,14 +279,61 @@ export default class AudioControls extends Component {
   
   togglePlayState() {
     const { isPaused } = this.state;
-    console.log('togglePlayState', isPaused);
+    const { currentSound } = this.props;
+    if (!currentSound) {
+      return;
+    }
     this.setState({ isPaused: !isPaused });
+    console.log('togglePlayState', this.state.isPaused, currentSound);
+    
+    if (isPaused) {
+      currentSound.play((success) => {
+        if (success) {
+          console.log('successfully finished playing');
+        } else {
+          console.log('playback failed due to audio decoding errors');
+        }
+      });
+    } else {
+      currentSound.pause();
+    }
   }
   
   toggleMuteState() {
-    const { isMuted } = this.state;
-    console.log('toggleMuteState', isMuted);
+    const { isMuted, value } = this.state;
+    const { currentSound } = this.props;
+    if (!currentSound) {
+      return;
+    }
+    console.log('toggleMuteState', isMuted, currentSound);
     this.setState({ isMuted: !isMuted });
+    
+    if (currentSound) {
+      currentSound.setVolume((!isMuted) ? 0 : value);
+    }
+  }
+  
+  startTimer() {
+    const props = this.props;
+    console.log('heartbeat', props);
+    
+    const heartbeat = setInterval(() => {
+      this.props.currentSound.getCurrentTime((seconds) => {
+        this.setState({ currentTime: seconds });
+      });
+    }, 1000);
+    
+    this.setState({ heartbeat });
+  }
+  
+  setVolume(value) {
+    console.log('setVolume()', value);
+    this.setState({ value });
+    
+    const { currentSound } = this.props;
+    if (currentSound) {
+      currentSound.setVolume(value);
+    }
   }
 }
 
@@ -237,4 +360,6 @@ AudioControls.defaultProps = {
   backgroundColor: '#7da0be',
   controlsColor: '#435d74',
   title: 'AUDIO FILE TITLE',
+  totalDuration: 0,
+  currentSound: null,
 };

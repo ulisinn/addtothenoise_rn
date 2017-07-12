@@ -3,6 +3,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/index';
+import moment from 'moment';
 import { getSelectionById } from '../../currentSelection';
 
 import { View, Text, TouchableOpacity } from 'react-native';
@@ -14,6 +15,7 @@ import Svg, {
 } from 'react-native-svg';
 
 import AudioControls from '../../components/AudioControls';
+import DetailItem from '../../components/DetailItem';
 
 class PortfolioView extends React.Component {
   
@@ -42,48 +44,72 @@ class PortfolioView extends React.Component {
       isAudio: false,
       currentSound: null,
       soundIsLoaded: false,
+      totalDuration: 0,
     };
+    this.onAudio = this.onAudio.bind(this);
   }
   
   componentWillMount() {
     const id = (this.props.navigation.state.params.id) ? this.props.navigation.state.params.id : -1;
     const { portfolio } = this.props;
     const currentSelection = getSelectionById(id, portfolio);
+    const onAudio = this.onAudio;
     console.log('PortfolioDetail componentWillMount', currentSelection[0], currentSelection[0].mpeg);
     
-    const currentSound = new Sound(currentSelection[0].mpeg, '', (error) => {
-      if (error) {
-        console.log('failed to load the sound', error);
-        return;
-      }
-      // loaded successfully
-      console.log('duration in seconds: ' + currentSound.getDuration() + 'number of channels: ' + currentSound.getNumberOfChannels());
-    });
-    
+    if (currentSelection[0].mpeg) {
+      const currentSound = new Sound(currentSelection[0].mpeg, '', (error) => {
+        if (error) {
+          onAudio(error);
+          return;
+        }
+        // loaded successfully
+        onAudio(null, currentSound, currentSound.getDuration());
+        
+      });
+    }
   }
   
-  componentWillReceiveProps(newProps) {
-    // console.log('PortfolioDetail componentWillReceiveProps', newProps);
-  }
-  
-  componentWillUpdate(nextProps, nextState) {
-    // console.log('PortfolioDetail componentWillUpdate', nextProps, nextState);
-  }
-  
-  componentWillUnmount() {
-    // console.log('PortfolioDetail componentWillUnmount');
-  }
   
   render() {
-    const id = (this.props.navigation.state.params.id) ? this.props.navigation.state.params.id : -1;
+    const { totalDuration, currentSound } = this.state;
     const { portfolio } = this.props;
+    const id = (this.props.navigation.state.params.id) ? this.props.navigation.state.params.id : -1;
     const currentSelection = getSelectionById(id, portfolio)[0];
-    const { title, controlsColor } = currentSelection;
-    console.log('PortfolioDetail render', this.props);
+    console.log('PortfolioDetail render', this.props, currentSelection);
+    const { title, controlsColor, backgroundColor } = currentSelection;
+    if (currentSelection) {
+    } else {
+      return null;
+    }
+    if (currentSelection.mpeg) {
+      return (
+        <AudioControls
+          backgroundColor={backgroundColor}
+          controlsColor={controlsColor}
+          totalDuration={totalDuration}
+          title={title}
+          currentSound={currentSound} />
+      );
+    } else {
+      return (
+        <DetailItem
+          title={title}
+        />
+      );
+    }
+  }
+  
+  onAudio(err, currentSound, duration) {
+    if (err) {
+      console.log('failed to load the sound', err);
+      return;
+    }
+    console.log('duration in seconds: ' + currentSound.getDuration() + 'number of channels: ' + currentSound.getNumberOfChannels());
+    this.setState({
+      currentSound: currentSound,
+      totalDuration: currentSound.getDuration(),
+    });
     
-    return (
-      <AudioControls />
-    );
   }
 }
 
