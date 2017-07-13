@@ -86,7 +86,9 @@ export default class DetailItem extends Component {
     const { mainImage, detailPages } = this.props.currentSelection;
     let images = [];
     images.push(mainImage);
-    images = images.concat(detailPages);
+    if (detailPages && detailPages.length >= 1) {
+      images = images.concat(detailPages);
+    }
     
     console.log('DetailItem', images, this.props.currentSelection);
     
