@@ -126,6 +126,7 @@ const getDetailImages = (arr) => {
 const createPortfolioItem = (cat, obj) => {
   const baseUrl = 'http://www.addtothenoise.com';
   const portFolioObj = {};
+  
   _.each(obj, (v, k) => {
     'use strict';
     switch (k) {
@@ -139,6 +140,9 @@ const createPortfolioItem = (cat, obj) => {
         portFolioObj[k] = v;
         break;
       case 'role':
+        portFolioObj[k] = v;
+        break;
+      case 'photography':
         portFolioObj[k] = v;
         break;
       case 'description':
