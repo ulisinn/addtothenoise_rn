@@ -32,10 +32,21 @@ export default class DetailItem extends Component {
     const getImages = this.getImages;
     const getListItem = this.getListItem;
     return (
-      <View style={[styleSheet.splashView, styleSheet.splashView]}>
-        <Text style={[globalStyles.COMMON_STYLES.text]}>{title.toUpperCase()}
+      <View style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <Text style={[globalStyles.COMMON_STYLES.text, {
+          padding: 20,
+          paddingBottom: 5,
+        }]}>{title.toUpperCase()}
         </Text>
-        <Text style={[globalStyles.COMMON_STYLES.descriptionText]}>{getDescription()}</Text>
+        <Text style={[globalStyles.COMMON_STYLES.descriptionText, {
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: 0,
+        }]}>{getDescription()}</Text>
         <FlatList style={{ marginTop: 40 }}
                   data={getImages()}
                   keyExtractor={this._keyExtractor}
