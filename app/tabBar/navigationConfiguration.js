@@ -17,7 +17,7 @@ const routeConfiguration = {
 const tabBarConfiguration = {
   tabBarOptions: {
     activeTintColor: HEADER_TEXT_COLOR,
-    inactiveTintColor: 'black',
+    inactiveTintColor: MUTED_COLOR,
     labelStyle: {
       fontSize: 14,
       fontFamily: VEGUR_BOLD,
@@ -28,6 +28,7 @@ const tabBarConfiguration = {
     tabStyle: {
       // backgroundColor: TEXT_COLOR,
     },
+    indicatorStyle: { backgroundColor: MUTED_COLOR},
     showIcon: false,
     activeBackgroundColor: TEXT_COLOR,
     inactiveBackgroundColor: HEADER_TEXT_COLOR,
