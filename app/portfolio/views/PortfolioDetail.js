@@ -93,7 +93,7 @@ class PortfolioView extends React.Component {
     } else {
       return (
         <DetailItem
-          title={title}
+          currentSelection={currentSelection}
         />
       );
     }

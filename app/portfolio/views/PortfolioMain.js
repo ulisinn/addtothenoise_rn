@@ -49,6 +49,8 @@ class MainScreen extends React.Component {
     return (nextProps.category !== this.props.category);
   }
   
+  _keyExtractor = (item, index) => item.id;
+  
   render() {
     
     const { currentSelection, category } = this.props;
@@ -70,6 +72,7 @@ class MainScreen extends React.Component {
         
         <FlatList style={{ marginTop: 40 }}
                   data={currentSelection}
+                  keyExtractor={this._keyExtractor}
                   renderItem={({ item }) => {
                     return getListItem(item);
                   }}
