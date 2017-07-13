@@ -1,8 +1,9 @@
-/**
+/*
+/!**
  * Sample React Native App
  * https://github.com/facebook/react-native
  * @flow
- */
+ *!/
 
 import React, { Component } from 'react';
 import {
@@ -51,3 +52,17 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('addtothenoise', () => addtothenoise);
+*/
+
+import 'babel-polyfill';
+import React from 'react';
+import {
+  AppRegistry,
+  View,
+  Text,
+} from 'react-native';
+
+
+import Main from './app/main';
+
+AppRegistry.registerComponent('addtothenoise', () => Main);
