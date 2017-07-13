@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  Dimensions,
   Image,
   View,
   Text,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
+  FlatList,
   StyleSheet,
-  Dimensions,
-  Animated,
 } from 'react-native';
 import { Dimensions as RNDimensions } from 'react-native';
 
@@ -18,24 +16,36 @@ import FastImage from 'react-native-fast-image';
 const scale = 0.8;
 
 export default class DetailItem extends Component {
+  
+  _keyExtractor = (item, index) => item;
+  
   constructor(props) {
     super(props);
     this.getDescription = this.getDescription.bind(this);
     this.getImages = this.getImages.bind(this);
+    this.getListItem = this.getListItem.bind(this);
   }
   
   render() {
     const { title, client } = this.props.currentSelection;
     const getDescription = this.getDescription;
     const getImages = this.getImages;
+    const getListItem = this.getListItem;
     return (
       <View style={[styleSheet.splashView, styleSheet.splashView]}>
         <Text style={[globalStyles.COMMON_STYLES.text]}>{title.toUpperCase()}
         </Text>
         <Text style={[globalStyles.COMMON_STYLES.descriptionText]}>{getDescription()}</Text>
-        <View>
+        <FlatList style={{ marginTop: 40 }}
+                  data={getImages()}
+                  keyExtractor={this._keyExtractor}
+                  renderItem={({ item }) => {
+                    return getListItem(item);
+                  }}
+        />
+        {/*        <View>
           {getImages()}
-        </View>
+        </View>*/}
       </View>
     );
   }
@@ -69,20 +79,26 @@ export default class DetailItem extends Component {
     
     console.log('DetailItem', images, this.props.currentSelection);
     
-    return images.map((d, i) => {
-      return (<FastImage key={i}
-                         resizeMode='contain'
-                         onLoadStart={() => {
-                           /*             console.log('Image onLoadStart', Image.getSize(src, (width, height) => {
-                                          console.log('\tImage.getSize', width, height, category);
-                                        }));*/
-                           // onImageLoad(id);
-                         }}
-                         source={{ uri: d }}
-                         style={[styleSheet.image]}
-      />);
-    });
+    return images;
   }
+  
+  getListItem(item) {
+    const onNavigateToDetail = this.onNavigateToDetail;
+    const { category } = this.props;
+    // console.log(category, 'getListItem', item.backgroundColor);
+    
+    return <FastImage resizeMode='contain'
+                      onLoadStart={() => {
+                        /*             console.log('Image onLoadStart', Image.getSize(src, (width, height) => {
+                                       console.log('\tImage.getSize', width, height, category);
+                                     }));*/
+                        // onImageLoad(id);
+                      }}
+                      source={{ uri: item }}
+                      style={[styleSheet.image]}
+    />;
+  }
+  
 }
 
 
